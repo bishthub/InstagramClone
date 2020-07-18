@@ -7,10 +7,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../key");
 const requireLogin = require("../middleware/requireLogin");
 
-router.get("/protected", requireLogin, (req, res) => {
-  res.send("Hello user");
-});
-router.post("/signup", (req, res) => {
+router.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   if (!email || !password || !name) {
     return res.status(422).json({ error: "please add all the fields" });
@@ -43,14 +40,14 @@ router.post("/signup", (req, res) => {
     });
 });
 
-router.post("/signin", (req, res) => {
+router.post("/login", (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.statusCode(422).json({ error: "please add email or password" });
+    return res.status(422).json({ error: "please add email or password" });
   }
   User.findOne({ email: email }).then((savedUser) => {
     if (!savedUser) {
-      return res.statusCode(422).json({ error: "invalid email" });
+      return res.status(422).json({ error: "invalid email" });
     }
     bcrypt
       .compare(password, savedUser.password)
@@ -58,7 +55,8 @@ router.post("/signin", (req, res) => {
         if (pasDidMatch) {
           // res.json({ message: "successfully signed In" });
           const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          res.json({ token });
+          const { _id, name, email } = savedUser;
+          res.json({ token, user: { _id, name, email } });
         } else {
           return res.status(422).json({ error: "Invalid email or password" });
         }
