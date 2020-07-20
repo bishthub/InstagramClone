@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./style.css";
 import M from "materialize-css";
@@ -8,13 +8,38 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const PostData = () => {
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState(undefined);
+
+  useEffect(() => {
+    if (url) {
+      uploadFields();
+    }
+  }, [url]);
+  const uploadPic = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "InstaClone");
+    data.append("cloud_name", "bishtji");
+    fetch("https://api.cloudinary.com/v1_1/bishtji/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUrl(data.url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const uploadFields = () => {
     if (
       !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
         email
       )
     ) {
-      M.toast({ html: "invalid Email", classes: "#c62828 red darken-3" });
+      M.toast({ html: "invalid email", classes: "#c62828 red darken-3" });
       return;
     }
     fetch("/register", {
@@ -24,8 +49,9 @@ const Register = () => {
       },
       body: JSON.stringify({
         name,
-        email,
         password,
+        email,
+        pic: url,
       }),
     })
       .then((res) => res.json())
@@ -40,6 +66,13 @@ const Register = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+  const PostData = () => {
+    if (image) {
+      uploadPic();
+    } else {
+      uploadFields();
+    }
   };
   return (
     <div className="container">
@@ -90,6 +123,18 @@ const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <div className="custom-file mb-3">
+                  <input
+                    type="file"
+                    className="custom-file-input"
+                    id="customFile"
+                    name="filename"
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                  <label className="custom-file-label" for="customFile">
+                    Upload Profile Image
+                  </label>
+                </div>
               </div>
               <div className="col-md-12 text-center mb-3">
                 <button

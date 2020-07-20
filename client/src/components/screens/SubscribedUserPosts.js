@@ -5,7 +5,7 @@ const Home = () => {
   const [data, setData] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   useEffect(() => {
-    fetch("/allpost", {
+    fetch("/getsubpost", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -122,7 +122,7 @@ const Home = () => {
       {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
-            <h5 style={{ padding: "5px", marginLeft: "10px" }}>
+            <h5 style={{ padding: "5px" }}>
               <Link
                 to={
                   item.postedBy._id !== state._id
@@ -148,18 +148,17 @@ const Home = () => {
               <img src={item.photo} />
             </div>
             <div className="card-content">
-              {/* <i className="material-icons" style={{ color: "red" }}>
+              <i className="material-icons" style={{ color: "red" }}>
                 favorite
-              </i> */}
+              </i>
               {item.likes.includes(state._id) ? (
                 <i
                   className="material-icons"
-                  style={{ color: "red" }}
                   onClick={() => {
                     unlikePost(item._id);
                   }}
                 >
-                  favorite
+                  thumb_down
                 </i>
               ) : (
                 <i
@@ -168,7 +167,7 @@ const Home = () => {
                     likePost(item._id);
                   }}
                 >
-                  favorite
+                  thumb_up
                 </i>
               )}
 
