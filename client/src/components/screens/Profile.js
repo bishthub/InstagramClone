@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../App";
-import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [mypics, setPics] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState();
   useEffect(() => {
     fetch("/mypost", {
       headers: {
@@ -59,7 +57,7 @@ const Profile = () => {
     setImage(file);
   };
   return (
-    <div style={{ maxWidth: "550px", margin: "0px auto" }}>
+    <div style={{ maxWidth: "935px", margin: "0px auto" }}>
       <div
         style={{
           display: "flex",
@@ -72,6 +70,7 @@ const Profile = () => {
           <img
             style={{ width: "160px", height: "160px", borderRadius: "80px" }}
             src={state ? state.pic : "loading"}
+            alt="profile pic"
           ></img>
           <div className="custom-file mb-3">
             <input

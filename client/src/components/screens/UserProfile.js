@@ -74,7 +74,7 @@ const Profile = () => {
 
         setProfile((prevState) => {
           const newFollower = prevState.user.followers.filter(
-            (item) => item != data._id
+            (item) => item !== data._id
           );
           return {
             ...prevState,
@@ -101,6 +101,7 @@ const Profile = () => {
           >
             <div>
               <img
+                alt="profile pic"
                 style={{
                   width: "160px",
                   height: "160px",

@@ -1,45 +1,46 @@
-import React, { useState,useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import M from "materialize-css";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import M, { toast } from "materialize-css";
 const CreatePost = () => {
   const history = useHistory();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
   const [url, setImgurl] = useState("");
-  useEffect(()=>{
-    if(url){
-    fetch("/createpost", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        title,
-        body,
-        pic: url,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.error) {
-          M.toast({ html: data.error, classes: "#c62828 red darken-3" });
-        } else {
-          
-          M.toast({
-            html: "Post Created successfully",
-            classes: "#43a047 green darken-1",
-          });
-          history.push("/");
-        }
+  useEffect(() => {
+    if (url) {
+      fetch("/createpost", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: JSON.stringify({
+          title,
+          body,
+          pic: url,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            M.toast({ html: data.error, classes: "#c62828 red darken-3" });
+          } else {
+            var toastHTML =
+              ' <i class="small material-icons">cloud_done </i> <span>&nbsp;&nbsp;Post created Successfully.</span>';
+            M.toast({
+              html: toastHTML,
+              classes: "#43a047 green darken-1",
+            });
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  },[url])
+  }, [url]);
   const postDetails = () => {
     const data = new FormData();
     data.append("file", image);
@@ -56,14 +57,13 @@ const CreatePost = () => {
       .catch((err) => {
         console.log(err);
       });
-    
   };
   return (
     <div
       className="card input-field"
       style={{
         margin: "10px auto",
-        maxWidth: "500px",
+        maxWidth: "614px",
         padding: "20px",
         textAlign: "center",
       }}

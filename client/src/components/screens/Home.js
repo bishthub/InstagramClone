@@ -3,7 +3,7 @@ import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
 const Home = () => {
   const [data, setData] = useState([]);
-  const { state, dispatch } = useContext(UserContext);
+  const { state } = useContext(UserContext);
   useEffect(() => {
     fetch("/allpost", {
       headers: {
@@ -13,6 +13,7 @@ const Home = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
+        console.log(state);
         setData(result.posts);
       });
   }, []);
@@ -32,7 +33,7 @@ const Home = () => {
       .then((result) => {
         //   console.log(result)
         const newData = data.map((item) => {
-          if (item._id == result._id) {
+          if (item._id === result._id) {
             return result;
           } else {
             return item;
@@ -59,7 +60,7 @@ const Home = () => {
       .then((result) => {
         //   console.log(result)
         const newData = data.map((item) => {
-          if (item._id == result._id) {
+          if (item._id === result._id) {
             return result;
           } else {
             return item;
@@ -88,7 +89,7 @@ const Home = () => {
       .then((result) => {
         console.log(result);
         const newData = data.map((item) => {
-          if (item._id == result._id) {
+          if (item._id === result._id) {
             return result;
           } else {
             return item;
@@ -121,9 +122,26 @@ const Home = () => {
     <div className="home">
       {data.map((item) => {
         return (
-          <div className="card home-card" key={item._id}>
-            <h5 style={{ padding: "5px", marginLeft: "10px" }}>
+          <div className="card home-card cardbotle" key={item._id}>
+            <h5
+              style={{
+                padding: "5px",
+                marginLeft: "10px",
+                fontSize: "14px",
+                fontWeight: "600",
+                textTransform: "uppercase",
+              }}
+            >
+              <img
+                style={{
+                  maxWidth: "32px",
+                  maxHeight: "32px",
+                  borderRadius: "16px",
+                }}
+                src={item.postedBy.pic}
+              ></img>
               <Link
+                style={{ marginLeft: "3%" }}
                 to={
                   item.postedBy._id !== state._id
                     ? "/profile/" + item.postedBy._id
@@ -132,7 +150,7 @@ const Home = () => {
               >
                 {item.postedBy.name}
               </Link>{" "}
-              {item.postedBy._id == state._id && (
+              {item.postedBy._id === state._id && (
                 <i
                   className="material-icons"
                   style={{
@@ -145,7 +163,7 @@ const Home = () => {
               )}
             </h5>
             <div className="card-image">
-              <img src={item.photo} />
+              <img className="imgbolte" alt="post pic" src={item.photo} />
             </div>
             <div className="card-content">
               {/* <i className="material-icons" style={{ color: "red" }}>
@@ -189,9 +207,14 @@ const Home = () => {
                 onSubmit={(e) => {
                   e.preventDefault();
                   makeComment(e.target[0].value, item._id);
+                  document.getElementsByClassName("testingbolt").value = "";
                 }}
               >
-                <input type="text" placeholder="add a comment" />
+                <input
+                  className="testingbolt"
+                  type="text"
+                  placeholder="add a comment"
+                />
               </form>
             </div>
           </div>

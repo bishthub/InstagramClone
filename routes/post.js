@@ -6,7 +6,7 @@ const Post = mongoose.model("Post");
 
 router.get("/allpost", requireLogin, (req, res) => {
   Post.find()
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name pic")
     .populate("comments.postedBy", "_id name")
     .sort("-createdAt")
     .then((posts) => {
@@ -19,7 +19,7 @@ router.get("/allpost", requireLogin, (req, res) => {
 
 router.get("/getsubpost", requireLogin, (req, res) => {
   Post.find({ postedBy: { $in: req.user.following } })
-    .populate("postedBy", "_id name")
+    .populate("postedBy", "_id name pic")
     .populate("comments.postedBy", "_id name")
     .sort("-createdAt")
     .then((posts) => {
@@ -72,13 +72,16 @@ router.put("/like", requireLogin, (req, res) => {
     {
       new: true,
     }
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      res.json(result);
-    }
-  });
+  )
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
 });
 router.put("/unlike", requireLogin, (req, res) => {
   Post.findByIdAndUpdate(
@@ -89,13 +92,16 @@ router.put("/unlike", requireLogin, (req, res) => {
     {
       new: true,
     }
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      res.json(result);
-    }
-  });
+  )
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
 });
 
 router.put("/comment", requireLogin, (req, res) => {

@@ -5,7 +5,7 @@ import "./style.css";
 import M from "materialize-css";
 
 const Login = () => {
-  const { state, dispatch } = useContext(UserContext);
+  const { dispatch } = useContext(UserContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +15,12 @@ const Login = () => {
         email
       )
     ) {
-      M.toast({ html: "invalid Email", classes: "#c62828 red darken-3" });
+      var toastHTML =
+        ' <i class="small material-icons">cancel </i> <span>&nbsp;&nbsp;Invalid Email</span>';
+      M.toast({
+        html: toastHTML,
+        classes: "#c62828 red darken-3",
+      });
       return;
     }
     fetch("/login", {
@@ -32,16 +37,21 @@ const Login = () => {
       .then((data) => {
         console.log(data);
         if (data.error) {
-          M.toast({ html: data.error, classes: "#c62828 red darken-3" });
+          M.toast({
+            html: data.error,
+            classes: "#c62828 red darken-3",
+          });
         } else {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
           dispatch({ type: "USER", payload: data.user });
+          var toastHTML =
+            ' <i class="small material-icons">notifications_active </i> <span>&nbsp;&nbsp;Logged In Successfully</span>';
           M.toast({
-            html: "Logged In Successfully",
-            classes: "#43a047 green darken-1",
+            html: toastHTML,
+            classes: "#43a047 green darken-1 ",
           });
-          history.push("/");
+          history.push("/explore");
         }
       })
       .catch((err) => {
@@ -87,7 +97,15 @@ const Login = () => {
               </div>
               <div class="form-group">
                 <p class="text-center">
-                  By signing up you accept our <Link to="/">Terms Of Use</Link>
+                  Forgot Password? <Link to="/reset">Reset</Link>
+                </p>
+                <p class="text-center">
+                  By signing up you accept our
+                  <span className="onhover">
+                    {" "}
+                    Terms Of Use
+                    <span className="tooltiptext">Dont spam accounts</span>
+                  </span>
                 </p>
               </div>
               <div class="col-md-12 text-center ">

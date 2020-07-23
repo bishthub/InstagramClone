@@ -29,3 +29,50 @@ a {
 .material-icons:hover {
   cursor: pointer;
 }
+.collection-item {
+  width: 100%;
+}
+
+.modaltest {
+  color: black;
+  top: -50% !important;
+  height: 30%;
+}
+
+.inputtest {
+  display: inline !important;
+  width: 90% !important;
+  margin-top: -8% !important;
+}
+
+.itest {
+  display: inline !important;
+  margin-left: 95% !important;
+  float: right !important;
+  width: 85px !important;
+}
+
+.onhover:hover .tooltiptext {
+  visibility: visible;
+}
+.onhover .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.cardbotle {
+  max-width: 614px;
+}
+.imgbolte {
+  max-height: 750px;
+}

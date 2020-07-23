@@ -39,7 +39,9 @@ const Register = () => {
         email
       )
     ) {
-      M.toast({ html: "invalid email", classes: "#c62828 red darken-3" });
+      var toastHTML =
+        ' <i class="small material-icons">cancel </i> <span>&nbsp;&nbsp;Invalid Email</span>';
+      M.toast({ html: toastHTML, classes: "#c62828 red darken-3" });
       return;
     }
     fetch("/register", {
